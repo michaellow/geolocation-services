@@ -1,0 +1,11 @@
+.idea
+.gradle
+.DS_STORE
+*.iml
+*.log
+classes
+build
+node_modules
+.sonar
+lucene
+*.rdb
