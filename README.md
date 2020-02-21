@@ -52,16 +52,17 @@ go to `geolocation/` folder, run command below to clone graphhopper repo
 ```bash
 git clone https://github.com/graphhopper/graphhopper.git
 ```
+---
+* download target pbf files from https://download.geofabrik.de/index.html
+* place the files in the data folder
 
+---
 go to `geolocation/graphhopper` folder
 ```bash
 cd ./graphhopper
 ```
 
----
-**Optional** - use other pbf file
-
-download target pbf files from https://download.geofabrik.de/index.html, place the files in the data folder
+edit `geolocation/graphhopper/Dockerfile`, change `CMD [ "/data/europe_germany_berlin.pbf" ]` to `CMD [ "/data/target_file.pbf" ]` from previous step
 
 ---
 
