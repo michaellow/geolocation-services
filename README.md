@@ -68,7 +68,9 @@ extract from the URL `asia/malaysia-singapore-brunei.html`
 ```bash
 asia_malaysia-singapore-brunei.pbf
 ```
-edit `geolocation-services/graphhopper/Dockerfile`, change `CMD [ "/data/europe_germany_berlin.pbf" ]` to `CMD [ "/data/asia_malaysia-singapore-brunei.pbf" ]` from previous step
+* open `geolocation-services/graphhopper/Dockerfile`
+* change `CMD [ "/data/europe_germany_berlin.pbf" ]` to `CMD [ "-i", "/data/asia_malaysia-singapore-brunei.pbf", "-o", "malaysia-singapore-brunei-gh" ]` from previous step
+* configure jvm heapsize `ENV JAVA_OPTS "-server -Xconcurrentio -Xmx1g -Xms1g -XX:+UseG1GC -Ddw.server.applicationConnectors[0].bindHost=0.0.0.0 -Ddw.server.applicationConnectors[0].port=8989"` to larger figure depending on map size
 
 ---
 
