@@ -57,11 +57,15 @@ go to `geolocation-services/graphhopper` folder
 ```bash
 cd ./graphhopper
 ```
-
+---
+checkout version 0.13 by running command below
+```bash
+git checkout 0.13
+```
 ---
 visit https://download.geofabrik.de/index.html, browse to respective map's pbf screen to extract the URL. For example, malaysia map: https://download.geofabrik.de/asia/malaysia-singapore-brunei.html
 
-extract from the URL `asia/malaysia-singapore-brunei.html`
+copy the URL `asia/malaysia-singapore-brunei.html`
 
 * replace the trailing `.html` with `.pbf`
 * replace the `/` with `_`
@@ -73,7 +77,33 @@ asia_malaysia-singapore-brunei.pbf
 * configure jvm heapsize `ENV JAVA_OPTS "-server -Xconcurrentio -Xmx1g -Xms1g -XX:+UseG1GC -Ddw.server.applicationConnectors[0].bindHost=0.0.0.0 -Ddw.server.applicationConnectors[0].port=8989"` to larger figure depending on map size
 
 ---
+open `geolocation-services/graphhopper/graphhopper.sh`, replace script block line 246 with:
+```bash
+if [[ "$ACTION" = "web" ]]; then
+  export MAVEN_OPTS="$MAVEN_OPTS $JAVA_OPTS"
+  if [[ "$RUN_BACKGROUND" == "true" ]]; then
+    exec "$JAVA" $JAVA_OPTS -Dgraphhopper.datareader.file="$OSM_FILE" -Dgraphhopper.graph.location="$GRAPH" \
+                 -Dgraphhopper.graph.flag_encoders=car,bike \
+                 -Dgraphhopper.graph.location=./graph-cache \
+                 -Dgraphhopper.graph.bytes_for_flags=12 \
+                 $GH_WEB_OPTS -jar "$JAR" server $CONFIG <&- &
+    
+    if [[ "$GH_PID_FILE" != "" ]]; then
+       echo $! > $GH_PID_FILE
+    fi
+    exit $?
+  else
+    # TODO how to avoid duplicative command for foreground and background?
+    exec "$JAVA" $JAVA_OPTS -Dgraphhopper.datareader.file="$OSM_FILE" -Dgraphhopper.graph.location="$GRAPH" \
+                 -Dgraphhopper.graph.flag_encoders=car,bike \
+                 -Dgraphhopper.graph.location=./graph-cache \
+                 -Dgraphhopper.graph.bytes_for_flags=12 \
+                 $GH_WEB_OPTS -jar "$JAR" server $CONFIG
+    # foreground => we never reach this here
+  fi
+```
 
+---
 build graphhopper image
 ```bash
 docker build -t graphhopper .
