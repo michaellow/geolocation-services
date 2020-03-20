@@ -1,5 +1,12 @@
 # Usage
 
+## prerequisite
+in `geolocation-services/` folder, run command below to clone the required sub module
+```bash
+git submodule init
+git submodule update
+```
+
 ## 1. nominatim-docker
 go to `geolocation-services/nominatim-docker` folder
 ```bash
@@ -48,11 +55,6 @@ curl "http://localhost:2322/api?q=klcc"
 ```
 
 ## 3. graphhopper-docker
-go to `geolocation-services/` folder, run command below to clone graphhopper repo
-```bash
-git clone https://github.com/graphhopper/graphhopper.git
-```
----
 go to `geolocation-services/graphhopper` folder
 ```bash
 cd ./graphhopper
