@@ -25,6 +25,13 @@ docker run -d -p 8080:8080 -p 5432:5432 \
 --name nominatim -ti nominatim
 ```
 
+[optional] map to different host port
+```bash
+docker run -d -p 8181:8080 -p 5432:5432 \
+-e NOMINATIM_PBF_URL='https://download.geofabrik.de/asia/malaysia-singapore-brunei-latest.osm.pbf' \
+--name nominatim -ti nominatim
+```
+
 test nominatim container
 ```bash
 http://localhost:8080/
