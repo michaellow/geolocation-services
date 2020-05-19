@@ -51,6 +51,12 @@ build photon image
 docker build -t photon .
 ```
 
+(if linux, replace 'host.docker.internal' in Dockerfil with the internal IP address of the Docker host). You can get the Docker internal IP from command below:
+```bash
+ifconfig docker0
+```
+
+
 start photon container link to nominatim container's db
 ```bash
 docker run -p 2322:2322 --name photon --link nominatim:nominatim -ti photon
