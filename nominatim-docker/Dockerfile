@@ -1,6 +1,6 @@
 FROM ubuntu:xenial as builder
 
-ENV NOMINATIM_VERSION 3.4.1
+ENV NOMINATIM_VERSION 3.6.0
 
 # Let the container know that there is no TTY
 ARG DEBIAN_FRONTEND=noninteractive
@@ -28,7 +28,7 @@ RUN apt-get -y update \
 
 # Build Nominatim
 RUN cd /srv \
- && curl --silent -L http://www.nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar.bz2 -o v$NOMINATIM_VERSION.tar.bz2 \
+ && curl --silent -k -L https://www.nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar.bz2 -o v$NOMINATIM_VERSION.tar.bz2 \
  && tar xf v$NOMINATIM_VERSION.tar.bz2 \
  && rm v$NOMINATIM_VERSION.tar.bz2 \
  && mv Nominatim-$NOMINATIM_VERSION nominatim \
@@ -67,9 +67,12 @@ RUN apt-get -y update \
     php \
     php-pgsql \
     libapache2-mod-php \
+    libboost-filesystem-dev \
     php-pear \
     php-db \
     php-intl \
+    python3-dev \
+    python3-psycopg2 \
     curl \
     ca-certificates \
     sudo \
