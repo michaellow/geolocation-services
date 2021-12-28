@@ -98,7 +98,7 @@ if [[ "$ACTION" = "web" ]]; then
   export MAVEN_OPTS="$MAVEN_OPTS $JAVA_OPTS"
   if [[ "$RUN_BACKGROUND" == "true" ]]; then
     exec "$JAVA" $JAVA_OPTS -Dgraphhopper.datareader.file="$OSM_FILE" -Dgraphhopper.graph.location="$GRAPH" \
-                 -Dgraphhopper.graph.flag_encoders=car,bike \
+                 -Dgraphhopper.graph.flag_encoders=car \
                  -Dgraphhopper.graph.location=./graph-cache \
                  -Dgraphhopper.graph.bytes_for_flags=12 \
                  $GH_WEB_OPTS -jar "$JAR" server $CONFIG <&- &
@@ -110,7 +110,7 @@ if [[ "$ACTION" = "web" ]]; then
   else
     # TODO how to avoid duplicative command for foreground and background?
     exec "$JAVA" $JAVA_OPTS -Dgraphhopper.datareader.file="$OSM_FILE" -Dgraphhopper.graph.location="$GRAPH" \
-                 -Dgraphhopper.graph.flag_encoders=car,bike \
+                 -Dgraphhopper.graph.flag_encoders=car \
                  -Dgraphhopper.graph.location=./graph-cache \
                  -Dgraphhopper.graph.bytes_for_flags=12 \
                  $GH_WEB_OPTS -jar "$JAR" server $CONFIG
