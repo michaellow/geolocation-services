@@ -18,28 +18,6 @@ build nominatim image
 docker build -t nominatim .
 ```
 
-start nominatim container with malaysia map
-```bash
-docker run -d -p 8080:8080 -p 5432:5432 \
--e NOMINATIM_PBF_URL='https://download.geofabrik.de/asia/malaysia-singapore-brunei-latest.osm.pbf' \
---name nominatim -ti nominatim
-```
-
-[optional] map to different host port
-```bash
-docker run -d -p 8181:8080 -p 5432:5432 \
--e NOMINATIM_PBF_URL='https://download.geofabrik.de/asia/malaysia-singapore-brunei-latest.osm.pbf' \
---name nominatim -ti nominatim
-```
-
-test nominatim container
-```bash
-http://localhost:8080/
-```
-* change `NOMINATIM_PBF_URL` to other pbf's path for other map, e.g. -> `https://download.geofabrik.de/asia/japan-latest.osm.pbf`
-* this might take hours / days to import if map being imported is too big 
-
-
 ## 2. photon-docker
 go to `geolocation-services/photon-docker` folder
 ```bash
@@ -56,16 +34,6 @@ docker build -t photon .
 ifconfig docker0
 ```
 
-
-start photon container link to nominatim container's db
-```bash
-docker run -p 2322:2322 --name photon --link nominatim:nominatim -ti photon
-```
-
-test photon container
-```bash
-curl "http://localhost:2322/api?q=klcc"
-```
 
 ## 3. graphhopper-docker
 go to `geolocation-services/graphhopper` folder
@@ -88,6 +56,7 @@ copy the URL `asia/malaysia-singapore-brunei.html`
 asia_malaysia-singapore-brunei.pbf
 ```
 * open `geolocation-services/graphhopper/Dockerfile`
+* change `https://deb.nodesource.com/setup_11.x` to `https://deb.nodesource.com/setup_12.x`
 * change `CMD [ "/data/europe_germany_berlin.pbf" ]` to `CMD [ "-i", "/data/asia_malaysia-singapore-brunei.pbf", "-o", "malaysia-singapore-brunei-gh" ]` from previous step
 * configure jvm heapsize `ENV JAVA_OPTS "-server -Xconcurrentio -Xmx1g -Xms1g -XX:+UseG1GC -Ddw.server.applicationConnectors[0].bindHost=0.0.0.0 -Ddw.server.applicationConnectors[0].port=8989"` to larger figure depending on map size
 
@@ -124,9 +93,60 @@ build graphhopper image
 docker build -t graphhopper .
 ```
 
-start graphhopper container 
+## 4. Run container
+
+### 4.1. Docker Run - Nominatim
+
+start nominatim container with malaysia map
+```bash
+docker run -d -p 8080:8080 -p 5432:5432 \
+-e NOMINATIM_PBF_URL='https://download.geofabrik.de/asia/malaysia-singapore-brunei-latest.osm.pbf' \
+--name nominatim -ti nominatim
+```
+
+[optional] map to different host port
+```bash
+docker run -d -p 8181:8080 -p 5432:5432 \
+-e NOMINATIM_PBF_URL='https://download.geofabrik.de/asia/malaysia-singapore-brunei-latest.osm.pbf' \
+--name nominatim -ti nominatim
+```
+
+test nominatim container
+```bash
+http://localhost:8080/
+```
+* change `NOMINATIM_PBF_URL` to other pbf's path for other map, e.g. -> `https://download.geofabrik.de/asia/japan-latest.osm.pbf`
+* this might take hours / days to import if map being imported is too big 
+
+
+### 4.2. Docker Run - Photon
+
+start photon container link to nominatim container's db
+```bash
+docker run -p 2322:2322 --name photon --link nominatim:nominatim -ti photon
+```
+
+
+test photon container
+```bash
+curl "http://localhost:2322/api?q=klcc"
+```
+
+
+### 4.3. Docker Run - GraphHopper
+start graphhopper container
 ```bash
 docker run -d --name graphhopper -v <path_geolocation-services_directory>/data:/data -p 8989:8989 graphhopper
 ```
 
 * this might take hours to load the target pbf, depending on the file size
+
+
+### 4.4. Docker-compose - ALL
+browse to `geolocation-services/` and update the `docker-compose.yml` accordingly to point to correct images / ports / volume.
+
+run command
+```bash
+docker-compose up
+```
+
