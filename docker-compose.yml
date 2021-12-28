@@ -1,0 +1,15 @@
+nominatim:
+  ports:
+    - '8181:8080'
+    - '5432:5432'
+  environment:
+    - 'NOMINATIM_PBF_URL=https://download.geofabrik.de/asia/malaysia-singapore-brunei-latest.osm.pbf'
+  image: 'nominatim:latest'
+
+
+photon:
+  ports:
+    - '2322:2322'
+  links:
+    - 'nominatim:nominatim'
+  image: 'photon:latest'
