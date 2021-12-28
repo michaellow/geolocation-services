@@ -33,6 +33,7 @@ docker build -t photon .
 ```bash
 ifconfig docker0
 ```
+NOTE: Nominatim container has to be running as photon will connect to nominatim's postgres for document reference during docker image build.
 
 
 ## 3. graphhopper-docker
