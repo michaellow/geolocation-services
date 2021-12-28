@@ -13,3 +13,11 @@ photon:
   links:
     - 'nominatim:nominatim'
   image: 'photon:latest'
+
+
+graphhopper:
+  ports:
+    - '8989:8989'
+  image: 'graphhopper:latest'
+  volumes:
+    - '<path_geolocation-services_directory>/data:/data'
