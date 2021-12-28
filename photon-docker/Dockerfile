@@ -23,8 +23,8 @@ EXPOSE 9200
 
 # Download photon release
 RUN rm -rf /photon/photon_data/elasticsearch/data
-RUN wget https://github.com/komoot/photon/releases/download/0.3.2/photon-0.3.2.jar
-RUN java -jar /photon/photon-0.3.2.jar  -nominatim-import -host host.docker.internal -port 5432 -languages en
+RUN wget https://github.com/komoot/photon/releases/download/0.3.5/photon-0.3.5.jar
+RUN java -jar /photon/photon-0.3.5.jar -nominatim-import -host host.docker.internal -port 5432 -languages en
 
 ENTRYPOINT ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java"]
-CMD ["-jar", "/photon/photon-0.3.2.jar"]
+CMD ["-jar", "/photon/photon-0.3.5.jar"]

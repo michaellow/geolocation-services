@@ -1,6 +1,6 @@
 FROM ubuntu:xenial as builder
 
-ENV NOMINATIM_VERSION 3.6.0
+ENV NOMINATIM_VERSION 3.5.2
 
 # Let the container know that there is no TTY
 ARG DEBIAN_FRONTEND=noninteractive
